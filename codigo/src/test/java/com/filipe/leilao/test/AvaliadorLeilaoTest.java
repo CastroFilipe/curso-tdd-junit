@@ -2,6 +2,8 @@ package com.filipe.leilao.test;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import com.filipe.leilao.domain.Lance;
@@ -82,7 +84,7 @@ public class AvaliadorLeilaoTest {
 		assertEquals(550.0, avaliador.getTresMaiores().get(1).getValor(), 00001);
 		assertEquals(500.0, avaliador.getTresMaiores().get(2).getValor(), 00001);
 	}
-	
+
 	@Test
 	public void deveEntenderLeilaoComLancesEmOrdemRandomica() {
 
@@ -108,7 +110,7 @@ public class AvaliadorLeilaoTest {
 		assertEquals(200.0, avaliador.getMenorLance(), 00001);
 		assertEquals(700.0, avaliador.getMaiorLance(), 00001);
 	}
-	
+
 	@Test
 	public void deveEntenderLeilaoComLancesEmOrdemDecrescente() {
 
@@ -134,7 +136,7 @@ public class AvaliadorLeilaoTest {
 		assertEquals(200.0, avaliador.getMenorLance(), 00001);
 		assertEquals(700.0, avaliador.getMaiorLance(), 00001);
 	}
-	
+
 	@Test
 	public void deveEntenderLeilaoComDoisLances() {
 
@@ -156,6 +158,20 @@ public class AvaliadorLeilaoTest {
 
 		assertEquals(700.0, avaliador.getTresMaiores().get(0).getValor(), 00001);
 		assertEquals(600.0, avaliador.getTresMaiores().get(1).getValor(), 00001);
+	}
+
+	@Test
+	public void deveEntenderLeilaoSemLances() {
+
+		// Montar o cenário
+		Leilao leilao = new Leilao("Leilão de um PS3", new ArrayList<Lance>());
+
+		// Ação
+		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
+		avaliador.avaliar(leilao);
+
+		// Validação
+		assertEquals(0, avaliador.getTresMaiores().size());
 	}
 
 }
