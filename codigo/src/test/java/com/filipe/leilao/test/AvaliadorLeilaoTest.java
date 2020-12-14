@@ -108,5 +108,31 @@ public class AvaliadorLeilaoTest {
 		assertEquals(200.0, avaliador.getMenorLance(), 00001);
 		assertEquals(700.0, avaliador.getMaiorLance(), 00001);
 	}
+	
+	@Test
+	public void deveEntenderLeilaoComLancesEmOrdemDecrescente() {
+
+		// Montar o cenário
+		Usuario joao = new Usuario("João");
+		Usuario maria = new Usuario("Maria");
+
+		Leilao leilao = new Leilao("Leilão de um PS3");
+
+		leilao.propor(new Lance(maria, 700.0));
+		leilao.propor(new Lance(joao, 600.0));
+		leilao.propor(new Lance(maria, 550.0));
+		leilao.propor(new Lance(joao, 500.0));
+		leilao.propor(new Lance(maria, 450.0));
+		leilao.propor(new Lance(joao, 400.0));
+		leilao.propor(new Lance(joao, 200.0));
+
+		// Ação
+		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
+		avaliador.avaliar(leilao);
+
+		// Validação
+		assertEquals(200.0, avaliador.getMenorLance(), 00001);
+		assertEquals(700.0, avaliador.getMaiorLance(), 00001);
+	}
 
 }
