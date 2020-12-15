@@ -1,6 +1,8 @@
 package com.filipe.leilao.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -28,7 +30,7 @@ public class AvaliadorLeilaoTest {
 		this.pedro = new Usuario("Pedro");
 		this.tereza = new Usuario("Tereza");
 	}
-
+	
 	@Test
 	public void avaliar() {
 
@@ -151,17 +153,27 @@ public class AvaliadorLeilaoTest {
 		assertEquals(600.0, avaliador.getTresMaiores().get(1).getValor(), 00001);
 	}
 
+//	@Test
+//	public void deveEntenderLeilaoSemLances() {
+//
+//		// Montar o cenário
+//		Leilao leilao = new Leilao("Leilão de um PS3", new ArrayList<Lance>());
+//
+//		// Ação
+//		this.avaliador.avaliar(leilao);
+//
+//		// Validação
+//		assertEquals(0, avaliador.getTresMaiores().size());
+//	}
+	
 	@Test
-	public void deveEntenderLeilaoSemLances() {
-
+	public void naoDeveAvaliarLeiloesSemLances() {
 		// Montar o cenário
 		Leilao leilao = new Leilao("Leilão de um PS3", new ArrayList<Lance>());
+		
+		RuntimeException ex = assertThrows(RuntimeException.class,() ->  this.avaliador.avaliar(leilao));
 
-		// Ação
-		this.avaliador.avaliar(leilao);
-
-		// Validação
-		assertEquals(0, avaliador.getTresMaiores().size());
+		assertTrue(ex.getMessage().contains("leilão sem lances"));
 	}
 
 }
