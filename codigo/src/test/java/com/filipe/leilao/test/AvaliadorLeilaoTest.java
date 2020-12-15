@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.filipe.leilao.domain.Lance;
@@ -13,15 +14,25 @@ import com.filipe.leilao.service.AvaliadorLeilaoService;
 
 public class AvaliadorLeilaoTest {
 
+	private AvaliadorLeilaoService avaliador;
+	private Usuario joao;
+	private Usuario maria;
+	private Usuario pedro;
+	private Usuario tereza;
+
+	@BeforeEach
+	public void init() {
+		avaliador = new AvaliadorLeilaoService();
+		this.joao = new Usuario("João");
+		this.maria = new Usuario("Maria");
+		this.pedro = new Usuario("Pedro");
+		this.tereza = new Usuario("Tereza");
+	}
+
 	@Test
 	public void avaliar() {
 
 		// Montar o cenário
-		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
-		Usuario pedro = new Usuario("Pedro");
-		Usuario tereza = new Usuario("Tereza");
-
 		Leilao leilao = new Leilao("Leilão de um PS3");
 
 		leilao.propor(new Lance(maria, 400.0));
@@ -30,8 +41,7 @@ public class AvaliadorLeilaoTest {
 		leilao.propor(new Lance(tereza, 600.0));
 
 		// Ação
-		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
-		avaliador.avaliar(leilao);
+		this.avaliador.avaliar(leilao);
 
 		// Validação
 		assertEquals(600.0, avaliador.getMaiorLance(), 000001);
@@ -43,15 +53,12 @@ public class AvaliadorLeilaoTest {
 	public void deveEntenderLeilaoComApenasUmLance() {
 
 		// Montar o cenário
-		Usuario joao = new Usuario("João");
-
 		Leilao leilao = new Leilao("Leilão de um PS3");
 
 		leilao.propor(new Lance(joao, 1500.0));
 
 		// Ação
-		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
-		avaliador.avaliar(leilao);
+		this.avaliador.avaliar(leilao);
 
 		// Validação
 		assertEquals(1500.0, avaliador.getMaiorLance(), 000001);
@@ -63,9 +70,6 @@ public class AvaliadorLeilaoTest {
 	public void deveEncontrarOsTresMaioresLances() {
 
 		// Montar o cenário
-		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
-
 		Leilao leilao = new Leilao("Leilão de um PS3");
 
 		leilao.propor(new Lance(maria, 400.0));
@@ -74,8 +78,7 @@ public class AvaliadorLeilaoTest {
 		leilao.propor(new Lance(joao, 600.0));
 
 		// Ação
-		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
-		avaliador.avaliar(leilao);
+		this.avaliador.avaliar(leilao);
 
 		// Validação
 		assertEquals(3, avaliador.getTresMaiores().size());
@@ -89,9 +92,6 @@ public class AvaliadorLeilaoTest {
 	public void deveEntenderLeilaoComLancesEmOrdemRandomica() {
 
 		// Montar o cenário
-		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
-
 		Leilao leilao = new Leilao("Leilão de um PS3");
 
 		leilao.propor(new Lance(maria, 200.0));
@@ -103,8 +103,7 @@ public class AvaliadorLeilaoTest {
 		leilao.propor(new Lance(joao, 250.0));
 
 		// Ação
-		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
-		avaliador.avaliar(leilao);
+		this.avaliador.avaliar(leilao);
 
 		// Validação
 		assertEquals(200.0, avaliador.getMenorLance(), 00001);
@@ -115,9 +114,6 @@ public class AvaliadorLeilaoTest {
 	public void deveEntenderLeilaoComLancesEmOrdemDecrescente() {
 
 		// Montar o cenário
-		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
-
 		Leilao leilao = new Leilao("Leilão de um PS3");
 
 		leilao.propor(new Lance(maria, 700.0));
@@ -129,8 +125,7 @@ public class AvaliadorLeilaoTest {
 		leilao.propor(new Lance(joao, 200.0));
 
 		// Ação
-		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
-		avaliador.avaliar(leilao);
+		this.avaliador.avaliar(leilao);
 
 		// Validação
 		assertEquals(200.0, avaliador.getMenorLance(), 00001);
@@ -141,17 +136,13 @@ public class AvaliadorLeilaoTest {
 	public void deveEntenderLeilaoComDoisLances() {
 
 		// Montar o cenário
-		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
-
 		Leilao leilao = new Leilao("Leilão de um PS3");
 
 		leilao.propor(new Lance(maria, 700.0));
 		leilao.propor(new Lance(joao, 600.0));
 
 		// Ação
-		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
-		avaliador.avaliar(leilao);
+		this.avaliador.avaliar(leilao);
 
 		// Validação
 		assertEquals(2, avaliador.getTresMaiores().size());
@@ -167,8 +158,7 @@ public class AvaliadorLeilaoTest {
 		Leilao leilao = new Leilao("Leilão de um PS3", new ArrayList<Lance>());
 
 		// Ação
-		AvaliadorLeilaoService avaliador = new AvaliadorLeilaoService();
-		avaliador.avaliar(leilao);
+		this.avaliador.avaliar(leilao);
 
 		// Validação
 		assertEquals(0, avaliador.getTresMaiores().size());
